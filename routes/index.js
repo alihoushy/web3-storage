@@ -16,8 +16,7 @@ router.post('/upload', FILE_UPLOAD.single('file'), async function(req, res, next
     console.log('Uploaded in ipfs.');
 
     /** fetch image link */
-    const links = await axios.get(`https://dweb.link/api/v0/ls?arg=${cid}`);
-    console.log({ links });
+    let links = await axios.get(`https://dweb.link/api/v0/ls?arg=${cid}`);
 
     /** check errors */
     if (!links.data)
