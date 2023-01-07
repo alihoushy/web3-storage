@@ -19,14 +19,14 @@ router.post('/upload', FILE_UPLOAD.single('file'), async function(req, res, next
     const links = await axios.get(`https://dweb.link/api/v0/ls?arg=${cid}`);
 
     /** check errors */
-    if (!links.Objects || links.Objects.length == 0)
+    if (!links['Objects'] || Object.keys(links['Objects']).length == 0)
       throw new Error('Objects not found.');
-    if (!links.Objects[0].Links || links.Objects[0].Links.length == 0)
+    if (!links['Objects'][0]['Links'] || Object.keys(links['Objects'][0]['Links']).length == 0)
       throw new Error('Links not found.');
 
     /** parameters */
     const gateway_host = 'dweb.link';
-    const filename = links.Objects[0].Links[0].Name;
+    const filename = links['Objects'][0]['Links'][0]['Name'];
     const image_url = `https://${cid}.ipfs.${gateway_host}/${filename}`;
     const image_url_pattern = 'https://${cid}.ipfs.${gateway_host}/${filename}';
 
