@@ -17,6 +17,7 @@ router.post('/upload', FILE_UPLOAD.single('file'), async function(req, res, next
 
     /** fetch image link */
     const links = await axios.get(`https://dweb.link/api/v0/ls?arg=${cid}`);
+    console.log({ links });
 
     /** check errors */
     if (!links['Objects'] || Object.keys(links['Objects']).length == 0)
