@@ -1,6 +1,5 @@
 const process = require('process');
 const { Web3Storage, getFilesFromPath } = require('web3.storage');
-const { Blob, File } = require('buffer');
 
 /** upload files */
 module.exports.uploadToStorage = async (filePath, files) => {
@@ -32,11 +31,11 @@ module.exports.uploadToStorage = async (filePath, files) => {
 
 /** make file from json object */
 module.exports.makeFileObjects = (name, obj) => {
-  const blob = new Blob([JSON.stringify(obj)], { type: 'application/json' });
+  const buffer = Buffer.from(JSON.stringify(obj));
 
   const files = [
     new File(['contents-of-file-1'], 'plain-utf8.txt'),
-    new File([blob], name + '.json')
+    new File([buffer], name + '.json')
   ];
 
   return files;
