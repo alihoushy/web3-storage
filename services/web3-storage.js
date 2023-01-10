@@ -1,5 +1,6 @@
 const process = require('process');
 const { Web3Storage, getFilesFromPath } = require('web3.storage');
+const { Blob, File } = require('buffer');
 
 /** upload files */
 module.exports.uploadToStorage = async (filePath, files) => {
@@ -10,7 +11,7 @@ module.exports.uploadToStorage = async (filePath, files) => {
   }
 
   const storage = new Web3Storage({ token });
-  const _files = [];
+  let _files = [];
 
   /** check filePath & files */
   if (filePath != null) {

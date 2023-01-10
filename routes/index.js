@@ -1,11 +1,18 @@
 var express = require('express');
 var router = express.Router();
+const { FILE_UPLOAD } = require('../helpers/multer-upload');
 const web3Storage = require('../services/web3-storage');
 const axios = require('axios');
+const cors = require('cors');
 
-/* Upload file. */
-const { FILE_UPLOAD } = require('../helpers/multer-upload')
-router.post('/upload', FILE_UPLOAD.single('file'), async function(req, res, next) {
+/** cors option */
+let NFTCorsOptions = {
+  origin: 'http://127.0.0.1',
+  optionsSuccessStatus: 200
+};
+
+/* Upload file (NFT Project) */
+router.post('/upload', cors(NFTCorsOptions), FILE_UPLOAD.single('file'), async function(req, res, next) {
   try {
     /** upload in local */
     let filePath = process.env.FILE_DIR + req.uploadedFileName
@@ -44,15 +51,15 @@ router.post('/upload', FILE_UPLOAD.single('file'), async function(req, res, next
   }
 });
 
-/** upload json metadata */
-router.post('/metadata/upload', async function(req, res, next) {
+/** upload json metadata (NFT Project) */
+router.post('/metadata/upload', cors(NFTCorsOptions), async function(req, res, next) {
   try {
     /** check body data */
-    if (!req.body || !req.body.data)
-      throw new Error('data not found.');
+    if (!req.body)
+      throw new Error('request body not found.');
 
     /** get */
-    const files = await web3Storage.makeFileObjects(req.body.data);
+    const files = await web3Storage.makeFileObjects('sample-name', req.body);
 
     /** upload to ipfs */
     const cid = await web3Storage.uploadToStorage(null, files);
@@ -61,7 +68,7 @@ router.post('/metadata/upload', async function(req, res, next) {
     /** response */
     res.status(200).json({ message: 'Done.', cid });
   } catch (err) {
-    res.status(500).json({ message: err.message, image: null });
+    res.status(500).json({ message: err.stack, image: null });
   }
 });
 
