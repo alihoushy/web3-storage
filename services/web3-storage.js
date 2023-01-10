@@ -1,7 +1,8 @@
 const process = require('process');
 const { Web3Storage, getFilesFromPath } = require('web3.storage');
 
-module.exports.uploadToStorage = async (filePath) => {
+/** upload files */
+module.exports.uploadToStorage = async (filePath, files) => {
   const token = process.env.WEb3_STORAGE_API_KEY;
 
   if (!token) {
@@ -9,14 +10,33 @@ module.exports.uploadToStorage = async (filePath) => {
   }
 
   const storage = new Web3Storage({ token });
-  const files = [];
+  const _files = [];
 
-  const pathFiles = await getFilesFromPath(filePath);
-  files.push(...pathFiles);
+  /** check filePath & files */
+  if (filePath != null) {
+    const pathFiles = await getFilesFromPath(filePath);
+    _files.push(...pathFiles);
+  } else if (files != null) {
+    _files = files;
+  } else {
+    return null;
+  }
 
-  console.log(`Uploading ${files.length} files`)
-  const cid = await storage.put(files);
+  console.log(`Uploading ${_files.length} files`)
+  const cid = await storage.put(_files);
   console.log('Content added with CID:', cid);
 
   return cid;
+}
+
+/** make file from json object */
+module.exports.makeFileObjects = (name, obj) => {
+  const blob = new Blob([JSON.stringify(obj)], { type: 'application/json' });
+
+  const files = [
+    new File(['contents-of-file-1'], 'plain-utf8.txt'),
+    new File([blob], name + '.json')
+  ];
+
+  return files;
 }

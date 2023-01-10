@@ -12,7 +12,7 @@ router.post('/upload', FILE_UPLOAD.single('file'), async function(req, res, next
     console.log('Uploaded in local.');
 
     /** upload to ipfs */
-    const cid = await web3Storage.uploadToStorage(filePath);
+    const cid = await web3Storage.uploadToStorage(filePath, null);
     console.log('Uploaded in ipfs.');
 
     /** fetch image link */
@@ -39,6 +39,27 @@ router.post('/upload', FILE_UPLOAD.single('file'), async function(req, res, next
     /** response */
     res.status(200).json({ message: 'Done.', image: { gateway_host, filename, cid, pattern: image_url_pattern, url: image_url } });
   
+  } catch (err) {
+    res.status(500).json({ message: err.message, image: null });
+  }
+});
+
+/** upload json metadata */
+router.post('/metadata/upload', async function(req, res, next) {
+  try {
+    /** check body data */
+    if (!req.body || !req.body.data)
+      throw new Error('data not found.');
+
+    /** get */
+    const files = await web3Storage.makeFileObjects(req.body.data);
+
+    /** upload to ipfs */
+    const cid = await web3Storage.uploadToStorage(null, files);
+    console.log('Uploaded in ipfs.');
+
+    /** response */
+    res.status(200).json({ message: 'Done.', cid });
   } catch (err) {
     res.status(500).json({ message: err.message, image: null });
   }
