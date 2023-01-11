@@ -2,19 +2,18 @@ var express = require('express');
 var router = express.Router();
 const { FILE_UPLOAD } = require('../helpers/multer-upload');
 const web3Storage = require('../services/web3-storage');
-const axios = require('axios');
-const cors = require('cors');
+// const cors = require('cors');
 
 /** cors option */
-let NFTCorsOptions = {
-  origin: 'http://127.0.0.1',
-  optionsSuccessStatus: 200
-};
+// let NFTCorsOptions = {
+//   origin: 'http://127.0.0.1',
+//   optionsSuccessStatus: 200
+// };
 const gateway_host = [ 'dweb.link', 'w3s.link' ];
 const file_url_pattern = 'https://${cid}.ipfs.${gateway_host}/${filename}';
 
 /* Upload file (NFT Project) */
-router.post('/upload', cors(NFTCorsOptions), FILE_UPLOAD.single('file'), async function(req, res, next) {
+router.post('/upload', FILE_UPLOAD.single('file'), async function(req, res, next) {
   try {
     /** upload in local */
     let filePath = process.env.FILE_DIR + req.uploadedFileName
@@ -40,7 +39,7 @@ router.post('/upload', cors(NFTCorsOptions), FILE_UPLOAD.single('file'), async f
 });
 
 /** upload json metadata (NFT Project) */
-router.post('/metadata/upload', cors(NFTCorsOptions), async function(req, res, next) {
+router.post('/metadata/upload', async function(req, res, next) {
   try {
     /** check body data */
     if (!req.body)

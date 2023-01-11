@@ -1,0 +1,74 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# upload file
+
+Url : https://web3-storage-service.darkube.app/upload
+
+Method : POST
+
+Request body type : form-data
+
+Request body parameter :
+{
+	"file" : FILE
+}
+
+Response:
+# SUCCESS
+{
+    "message": "Done.",
+    "file": {
+        "gateway_host": ["dweb.link", 'w3s.link'],
+        "filename": "UPLOADED_FILE_NAME.png",
+        "cid": "UPLOADED_FILE_CID",
+        "pattern": "https://${cid}.ipfs.${gateway_host}/${filename}",
+        "url": "https://UPLOADED_FILE_CID.ipfs.dweb.link/UPLOADED_FILE_NAME.png"
+    }
+}
+# ERROR
+{
+    "message": "error message.",
+    "file": null
+}
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# upload json metadata
+
+Url : https://web3-storage-service.darkube.app/metadata/upload
+
+Method : POST
+
+Request body type : json
+
+Request body parameter :
+{
+	"description": "",
+	"external_url": "",
+	"file": "",
+	"name": "",
+	"attributes": [
+	  {},
+	  {}
+	]
+}
+
+Response:
+# SUCCESS
+{
+    "message": "Done.",
+    "file": {
+        "gateway_host": ["dweb.link", 'w3s.link'],
+        "filename": "UPLOADED_FILE_NAME.png",
+        "cid": "UPLOADED_FILE_CID",
+        "pattern": "https://${cid}.ipfs.${gateway_host}/${filename}",
+        "url": "https://UPLOADED_FILE_CID.ipfs.dweb.link/UPLOADED_FILE_NAME.png"
+    }
+}
+# ERROR
+{
+    "message": "error message.",
+    "file": null
+}
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #

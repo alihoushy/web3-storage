@@ -1,5 +1,6 @@
 const process = require('process');
 const { Web3Storage, getFilesFromPath } = require('web3.storage');
+const axios = require('axios');
 const fs = require('fs');
 
 /** upload files */
