@@ -34,7 +34,7 @@ router.post('/upload', FILE_UPLOAD.single('file'), async function(req, res, next
     res.status(200).json({ message: 'Done.', file: { gateway_host, filename, cid, pattern: file_url_pattern, url: file_url } });
   
   } catch (err) {
-    res.status(500).json({ message: err.message, file: null });
+    res.status(err.status || 500).json({ message: err.message, stack: err.stack, file: null });
   }
 });
 
@@ -62,7 +62,7 @@ router.post('/metadata/upload', async function(req, res, next) {
     /** response */
     res.status(200).json({ message: 'Done.', file: { gateway_host, filename, cid, pattern: file_url_pattern, url: file_url } });
   } catch (err) {
-    res.status(500).json({ message: err.stack, file: null });
+    res.status(err.status || 500).json({ message: err.message, stack: err.stack, file: null });
   }
 });
 

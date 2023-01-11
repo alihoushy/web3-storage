@@ -8,7 +8,7 @@ module.exports.uploadToStorage = async (filePath, files) => {
   const token = process.env.WEb3_STORAGE_API_KEY;
 
   if (!token) {
-    return console.error('A token is needed. You can create one on https://web3.storage');
+    throw new Error('A token is needed. You can create one on https://web3.storage');
   }
 
   const storage = new Web3Storage({ token });
