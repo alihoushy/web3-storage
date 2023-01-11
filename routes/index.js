@@ -10,6 +10,8 @@ let NFTCorsOptions = {
   origin: 'http://127.0.0.1',
   optionsSuccessStatus: 200
 };
+const gateway_host = [ 'dweb.link', 'w3s.link' ];
+const file_url_pattern = 'https://${cid}.ipfs.${gateway_host}/${filename}';
 
 /* Upload file (NFT Project) */
 router.post('/upload', cors(NFTCorsOptions), FILE_UPLOAD.single('file'), async function(req, res, next) {
@@ -22,32 +24,18 @@ router.post('/upload', cors(NFTCorsOptions), FILE_UPLOAD.single('file'), async f
     const cid = await web3Storage.uploadToStorage(filePath, null);
     console.log('Uploaded in ipfs.');
 
-    /** fetch image link */
-    let links = await axios.get(`https://dweb.link/api/v0/ls?arg=${cid}`);
-
-    /** check errors */
-    if (!links.data)
-      throw new Error('data not found.');
-
-    /** get data */
-    links = links.data;
-
-    if (!links.Objects || Object.keys(links.Objects).length == 0)
-      throw new Error('Objects not found.');
-    if (!links.Objects[0].Links || Object.keys(links.Objects[0].Links).length == 0)
-      throw new Error('Links not found.');
+    /** get data from cid */
+    const links = await web3Storage.getDataFromCID(cid);
 
     /** parameters */
-    const gateway_host = 'dweb.link';
     const filename = links.Objects[0].Links[0].Name;
-    const image_url = `https://${cid}.ipfs.${gateway_host}/${filename}`;
-    const image_url_pattern = 'https://${cid}.ipfs.${gateway_host}/${filename}';
+    const file_url = `https://${cid}.ipfs.${gateway_host[0]}/${filename}`;
 
     /** response */
-    res.status(200).json({ message: 'Done.', image: { gateway_host, filename, cid, pattern: image_url_pattern, url: image_url } });
+    res.status(200).json({ message: 'Done.', file: { gateway_host, filename, cid, pattern: file_url_pattern, url: file_url } });
   
   } catch (err) {
-    res.status(500).json({ message: err.message, image: null });
+    res.status(500).json({ message: err.message, file: null });
   }
 });
 
@@ -58,17 +46,24 @@ router.post('/metadata/upload', cors(NFTCorsOptions), async function(req, res, n
     if (!req.body)
       throw new Error('request body not found.');
 
-    /** get */
-    const files = await web3Storage.makeFileObjects('sample-name', req.body);
+    /** make file from json object */
+    const files = await web3Storage.makeJsonFile(req.body);
 
     /** upload to ipfs */
     const cid = await web3Storage.uploadToStorage(null, files);
     console.log('Uploaded in ipfs.');
 
+    /** get data from cid */
+    const links = await web3Storage.getDataFromCID(cid);
+
+    /** parameters */
+    const filename = links.Objects[0].Links[0].Name;
+    const file_url = `https://${cid}.ipfs.${gateway_host[0]}/${filename}`;
+
     /** response */
-    res.status(200).json({ message: 'Done.', cid });
+    res.status(200).json({ message: 'Done.', file: { gateway_host, filename, cid, pattern: file_url_pattern, url: file_url } });
   } catch (err) {
-    res.status(500).json({ message: err.stack, image: null });
+    res.status(500).json({ message: err.stack, file: null });
   }
 });
 

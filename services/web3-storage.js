@@ -1,5 +1,6 @@
 const process = require('process');
 const { Web3Storage, getFilesFromPath } = require('web3.storage');
+const fs = require('fs');
 
 /** upload files */
 module.exports.uploadToStorage = async (filePath, files) => {
@@ -22,7 +23,8 @@ module.exports.uploadToStorage = async (filePath, files) => {
     return null;
   }
 
-  console.log(`Uploading ${_files.length} files`)
+  /** Upload file */
+  console.log(`Uploading ${_files.length} files`);
   const cid = await storage.put(_files);
   console.log('Content added with CID:', cid);
 
@@ -30,13 +32,42 @@ module.exports.uploadToStorage = async (filePath, files) => {
 }
 
 /** make file from json object */
-module.exports.makeFileObjects = (name, obj) => {
-  const buffer = Buffer.from(JSON.stringify(obj));
+module.exports.makeJsonFile = async (obj) => {
+  /** parameters */
+  let files = [];
+  let filePath = process.env.FILE_DIR + 'metadata.json';
 
-  const files = [
-    new File(['contents-of-file-1'], 'plain-utf8.txt'),
-    new File([buffer], name + '.json')
-  ];
+  /** upload file */
+  console.log(`Uploading json metadata file`);
+  await fs.writeFile(filePath, Buffer.from(JSON.stringify(obj)), function (err) {
+    if (err) throw err;
+    console.log('json metadata file uploaded!');
+  });
+
+  /** push to files array */
+  const pathFiles = await getFilesFromPath(filePath);
+  files.push(...pathFiles);
 
   return files;
+}
+
+/** get data from cid */
+module.exports.getDataFromCID = async (cid) => {
+  /** fetch image link */
+  let links = await axios.get(`https://dweb.link/api/v0/ls?arg=${cid}`);
+
+  /** check errors */
+  if (!links.data)
+    throw new Error('data not found.');
+
+  /** get data */
+  links = links.data;
+
+  /** check errors */
+  if (!links.Objects || Object.keys(links.Objects).length == 0)
+    throw new Error('Objects not found.');
+  if (!links.Objects[0].Links || Object.keys(links.Objects[0].Links).length == 0)
+    throw new Error('Links not found.');
+
+  return links;
 }
