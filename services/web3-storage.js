@@ -35,7 +35,7 @@ module.exports.uploadToStorage = async (filePath, files) => {
 /** make file from json object */
 module.exports.makeJsonFile = async (obj) => {
   /** parameters */
-  let files = [];
+  // let files = [];
   let filePath = process.env.FILE_DIR + 'metadata.json';
 
   /** upload file */
@@ -46,10 +46,11 @@ module.exports.makeJsonFile = async (obj) => {
   });
 
   /** push to files array */
-  const pathFiles = await getFilesFromPath(filePath);
-  files.push(...pathFiles);
+  // const pathFiles = await getFilesFromPath(filePath);
+  // files.push(...pathFiles);
 
-  return files;
+  // return files;
+  return filePath;
 }
 
 /** get data from cid */
