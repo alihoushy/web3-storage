@@ -103,7 +103,7 @@ router.get('/download/*', function(req, res){
   let pathName = q.pathname;
   const lastIndex = pathName.lastIndexOf('/');
   const fileName = pathName.substring(lastIndex + 1);
-  const file = `${__dirname}` + process.env.DOWNLOAD_DIR + fileName;
+  const file = process.env.DOWNLOAD_DIR + fileName;
 
   let type = allowedTypes[path.extname(file).slice(1)] || 'text/plain';
   let s = fs.createReadStream(file);
