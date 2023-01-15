@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const { FILE_UPLOAD } = require('../helpers/multer-upload');
 const web3Storage = require('../services/web3-storage');
+const url = require('url');
 // const cors = require('cors');
 
 /** cors option */
@@ -16,7 +17,9 @@ const file_url_pattern = 'https://${cid}.ipfs.${gateway_host}/${filename}';
 router.post('/upload', FILE_UPLOAD.single('file'), async function(req, res, next) {
   try {
     /** upload in local */
-    let filePath = process.env.FILE_DIR + req.uploadedFileName
+    let filePath = process.env.FILE_DIR + req.uploadedFileName;
+    const lastIndex = filePath.lastIndexOf('/');
+    const fileName = filePath.substring(lastIndex + 1);
     console.log('Uploaded in local.');
 
     /** upload to ipfs */
@@ -29,7 +32,7 @@ router.post('/upload', FILE_UPLOAD.single('file'), async function(req, res, next
     /** parameters */
     // const filename = links.Objects[0].Links[0].Name;
     // const file_url = `https://${cid}.ipfs.${gateway_host[0]}/${filename}`;
-    const url = process.env.BASE_URL + filePath;
+    const url = process.env.BASE_URL + process.env.DOWNLOAD_URL + fileName;
 
     /** response */
     // res.status(200).json({ message: 'Done.', file: { gateway_host, filename, cid, pattern: file_url_pattern, url: file_url } });
@@ -50,6 +53,8 @@ router.post('/metadata/upload', async function(req, res, next) {
     /** make file from json object */
     // const files = await web3Storage.makeJsonFile(req.body);
     const filePath = await web3Storage.makeJsonFile(req.body);
+    const lastIndex = filePath.lastIndexOf('/');
+    const fileName = filePath.substring(lastIndex + 1);
     console.log('Uploaded in local.');
 
     /** upload to ipfs */
@@ -62,7 +67,7 @@ router.post('/metadata/upload', async function(req, res, next) {
     /** parameters */
     // const filename = links.Objects[0].Links[0].Name;
     // const file_url = `https://${cid}.ipfs.${gateway_host[0]}/${filename}`;
-    const url = process.env.BASE_URL + filePath;
+    const url = process.env.BASE_URL + process.env.DOWNLOAD_URL + fileName;
 
     /** response */
     // res.status(200).json({ message: 'Done.', file: { gateway_host, filename, cid, pattern: file_url_pattern, url: file_url } });
@@ -70,6 +75,15 @@ router.post('/metadata/upload', async function(req, res, next) {
   } catch (err) {
     res.status(err.status || 500).json({ message: err.message, stack: err.stack, file: null });
   }
+});
+
+router.get('/download/*', function(req, res){
+  const q = url.parse(req.url, true);
+  let pathName = q.pathname;
+  const lastIndex = pathName.lastIndexOf('/');
+  const fileName = pathName.substring(lastIndex + 1);
+  const file = `${__dirname}/..` + process.env.DOWNLOAD_DIR + fileName;
+  res.download(file); // Set disposition and send it.
 });
 
 module.exports = router;

@@ -36,7 +36,8 @@ module.exports.uploadToStorage = async (filePath, files) => {
 module.exports.makeJsonFile = async (obj) => {
   /** parameters */
   // let files = [];
-  let filePath = process.env.FILE_DIR + 'metadata.json';
+  // let filePath = process.env.FILE_DIR + '-metadata.json';
+  let filePath = process.env.FILE_DIR + (Math.random()).toString(36).substring(2) + '-metadata.json';
 
   /** upload file */
   console.log(`Uploading json metadata file`);
