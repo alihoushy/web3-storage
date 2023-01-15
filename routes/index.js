@@ -3,6 +3,8 @@ var router = express.Router();
 const { FILE_UPLOAD } = require('../helpers/multer-upload');
 const web3Storage = require('../services/web3-storage');
 const url = require('url');
+const path = require('path');
+const fs = require('fs');
 // const cors = require('cors');
 
 /** cors option */
@@ -12,6 +14,23 @@ const url = require('url');
 // };
 const gateway_host = [ 'dweb.link', 'w3s.link' ];
 const file_url_pattern = 'https://${cid}.ipfs.${gateway_host}/${filename}';
+const allowedTypes = {
+  jpeg: 'image/jpeg',
+  png: 'image/png',
+  gif: 'image/gif',
+  svg: 'image/svg+xml',
+  mp4: 'video/mp4',
+  webm: 'audio/webm',
+  webm: 'video/webm',
+  mpeg: 'audio/mpeg',
+  wav: 'audio/wav',
+  ogg: 'application/ogg',
+  ogg: 'audio/ogg',
+  ogg: 'video/ogg',
+  gltf: 'model/gltf+json',
+  gltf: 'model/gltf-binary',
+  json: 'application/json'
+};
 
 /* Upload file (NFT Project) */
 router.post('/upload', FILE_UPLOAD.single('file'), async function(req, res, next) {
@@ -83,7 +102,18 @@ router.get('/download/*', function(req, res){
   const lastIndex = pathName.lastIndexOf('/');
   const fileName = pathName.substring(lastIndex + 1);
   const file = `${__dirname}/..` + process.env.DOWNLOAD_DIR + fileName;
-  res.download(file); // Set disposition and send it.
+
+  let type = allowedTypes[path.extname(file).slice(1)] || 'text/plain';
+  let s = fs.createReadStream(file);
+  s.on('open', function () {
+      res.setHeader('Content-Type', type);
+      s.pipe(res);
+  });
+  s.on('error', function () {
+      res.setHeader('Content-Type', 'text/plain');
+      res.statusCode = 404;
+      res.end('Not found');
+  });
 });
 
 module.exports = router;
