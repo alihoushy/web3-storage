@@ -97,11 +97,13 @@ router.post('/metadata/upload', async function(req, res, next) {
 });
 
 router.get('/download/*', function(req, res){
+  console.log({ dirname: __dirname, download_dir: process.env.DOWNLOAD_DIR });
+
   const q = url.parse(req.url, true);
   let pathName = q.pathname;
   const lastIndex = pathName.lastIndexOf('/');
   const fileName = pathName.substring(lastIndex + 1);
-  const file = `${__dirname}/..` + process.env.DOWNLOAD_DIR + fileName;
+  const file = `${__dirname}` + process.env.DOWNLOAD_DIR + fileName;
 
   let type = allowedTypes[path.extname(file).slice(1)] || 'text/plain';
   let s = fs.createReadStream(file);
