@@ -139,7 +139,7 @@ router.get('/moralis/nft/transfers', async function(req, res) {
     /** response */
     res.set(headers).status(200).json(data);
   } catch (err) {
-    res.set(headers).setheade.status(err.status || 500).json({ message: err.message, stack: err.stack });
+    res.set(headers).status(err.status || 500).json({ message: err.message, stack: err.stack });
   }
 });
 

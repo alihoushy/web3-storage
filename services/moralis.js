@@ -1,13 +1,7 @@
-const process = require('process');
-const Moralis = require('moralis');
-const EvmChain = require('@moralisweb3/common-evm-utils');
+const Moralis = require('moralis').default;
 
 /** get all transfers of an NFT */
-module.exports.nftTransfers = async (address, tokenId, chain = EvmChain.ETHEREUM) => {
-  await Moralis.start({
-    apiKey: process.env.MORALIS_API_KEY,
-  });
-
+module.exports.nftTransfers = async (address, tokenId, chain) => {
   const response = await Moralis.EvmApi.nft.getNFTTransfers({
     address,
     tokenId,
