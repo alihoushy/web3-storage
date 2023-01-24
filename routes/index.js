@@ -125,22 +125,4 @@ router.get('/download/*', function(req, res) {
   });
 });
 
-/** get all transfers of an NFT */
-router.get('/moralis/nft/transfers', async function(req, res) {
-  try {
-    /** access the provided query parameters */
-    const address = req.query.address;
-    const tokenId = req.query.tokenId;
-    const chain = req.query.chain;
-
-    /** get transfers history */
-    const data = await moralis.nftTransfers(address, tokenId, chain);
-
-    /** response */
-    res.set(headers).status(200).json(data);
-  } catch (err) {
-    res.set(headers).status(err.status || 500).json({ message: err.message, stack: err.stack });
-  }
-});
-
 module.exports = router;
