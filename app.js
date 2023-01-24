@@ -6,6 +6,7 @@ var express = require('express');
 var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
 const fs = require('fs');
+const cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -27,6 +28,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// include before all routes
+app.use(cors({
+  origin: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  optionsSuccessStatus: 204
+}));
+app.options('*', cors());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

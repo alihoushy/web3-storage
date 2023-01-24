@@ -6,20 +6,7 @@ const moralis = require('../services/moralis');
 const url = require('url');
 const path = require('path');
 const fs = require('fs');
-// const cors = require('cors');
 
-/** cors option */
-// let NFTCorsOptions = {
-//   origin: 'http://127.0.0.1',
-//   optionsSuccessStatus: 200
-// };
-const headers = {
-  'Content-Type': 'application/json; charset=utf-8',
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': '*',
-  'Access-Control-Allow-Headers': '*',
-  'Access-Control-Allow-Credentials': true
-};
 const gateway_host = [ 'dweb.link', 'w3s.link' ];
 const file_url_pattern = 'https://${cid}.ipfs.${gateway_host}/${filename}';
 const allowedTypes = {
@@ -62,11 +49,11 @@ router.post('/upload', FILE_UPLOAD.single('file'), async function(req, res, next
     const url = process.env.BASE_URL + process.env.DOWNLOAD_URL + fileName;
 
     /** response */
-    // res.set(headers).status(200).json({ message: 'Done.', file: { gateway_host, filename, cid, pattern: file_url_pattern, url: file_url } });
-    res.set(headers).status(200).json({ file: url })
+    // res.status(200).json({ message: 'Done.', file: { gateway_host, filename, cid, pattern: file_url_pattern, url: file_url } });
+    res.status(200).json({ file: url })
   
   } catch (err) {
-    res.set(headers).status(err.status || 500).json({ message: err.message, stack: err.stack, file: null });
+    res.status(err.status || 500).json({ message: err.message, stack: err.stack, file: null });
   }
 });
 
@@ -97,10 +84,10 @@ router.post('/metadata/upload', async function(req, res, next) {
     const url = process.env.BASE_URL + process.env.DOWNLOAD_URL + fileName;
 
     /** response */
-    // res.set(headers).status(200).json({ message: 'Done.', file: { gateway_host, filename, cid, pattern: file_url_pattern, url: file_url } });
-    res.set(headers).status(200).json({ file: url })
+    // res.status(200).json({ message: 'Done.', file: { gateway_host, filename, cid, pattern: file_url_pattern, url: file_url } });
+    res.status(200).json({ file: url })
   } catch (err) {
-    res.set(headers).setheade.status(err.status || 500).json({ message: err.message, stack: err.stack, file: null });
+    res.setheade.status(err.status || 500).json({ message: err.message, stack: err.stack, file: null });
   }
 });
 
