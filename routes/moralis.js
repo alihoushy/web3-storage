@@ -3,8 +3,7 @@ var router = express.Router();
 const moralis = require('../services/moralis');
 
 /** get all transfers of an NFT */
-router.options('/nft/transfers', cors({ origin: '*' }));
-router.get('/nft/transfers', cors(), async function(req, res) {
+router.get('/nft/transfers', async function(req, res) {
   try {
     /** access the provided query parameters */
     const address = req.query.address;
