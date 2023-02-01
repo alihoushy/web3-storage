@@ -11,6 +11,7 @@ const cors = require('cors');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var moralisRouter = require('./routes/moralis');
+var fileUpload = require('express-fileupload');
 
 var app = express();
 
@@ -36,6 +37,9 @@ app.use(cors({
   optionsSuccessStatus: 204
 }));
 app.options('*', cors());
+
+// express-fileupload default options
+app.use(fileUpload());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
