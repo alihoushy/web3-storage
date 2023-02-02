@@ -1,4 +1,5 @@
 const process = require('process');
+const fs = require('fs');
 
 /** upload in local (private function) */
 module.exports.uploadInLocal = async (files) => {
@@ -17,7 +18,7 @@ module.exports.uploadInLocal = async (files) => {
      await uploadedFile.mv(uploadPath, function(err) {
           if (err)
                return null;
-
-          return uploadPath;
      });
+
+     return uploadPath;
 }
