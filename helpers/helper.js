@@ -10,8 +10,8 @@ module.exports.uploadInLocal = async (files) => {
           return res.status(400).send('No files were uploaded.');
      }
 
-     /* The name of the input field (i.e. "uploadedFile") is used to retrieve the uploaded file */
-     uploadedFile = files.uploadedFile;
+     /* The name of the input field (i.e. "nftFile") is used to retrieve the uploaded file */
+     uploadedFile = files.nftFile;
      uploadPath = process.env.FILE_DIR + uploadedFile.name;
 
      /* use the mv() method to place the file somewhere on your server */
