@@ -49,8 +49,7 @@ module.exports.makeJsonFile = async (obj) => {
   const pathFiles = await getFilesFromPath(filePath);
   files.push(...pathFiles);
 
-  // return files;
-  return filePath;
+  return files;
 }
 
 /** get data from cid */
