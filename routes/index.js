@@ -70,8 +70,14 @@ router.post('/metadata/upload', async function(req, res, next) {
     const cid = await web3Storage.uploadToStorage(null, files);
     console.log('Uploaded in ipfs.');
 
+    /** print logs */
+    console.log({ files });
+
     /** get data from cid */
     const links = await web3Storage.getDataFromCID(cid);
+
+    /** print logs */
+    console.log({ links, files });
 
     /** parameters */
     const filename = links.Objects[0].Links[0].Name;

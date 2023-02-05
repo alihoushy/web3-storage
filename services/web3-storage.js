@@ -40,16 +40,23 @@ module.exports.makeJsonFile = async (obj) => {
 
   /** upload file */
   console.log(`Uploading json metadata file`);
-  await fs.writeFile(filePath, Buffer.from(JSON.stringify(obj)), function (err) {
-    if (err) throw err;
-    console.log('json metadata file uploaded!');
-  });
+  await this.createFileFromString(filePath, Buffer.from(JSON.stringify(obj)));
 
   /** push to files array */
   const pathFiles = await getFilesFromPath(filePath);
   files.push(...pathFiles);
 
   return files;
+}
+
+/** create file from string */
+module.exports.createFileFromString = async (fileName, fileContent) => {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(fileName, fileContent, 'utf8', (err) => {
+      if (err) return reject(err);
+      resolve();
+    });
+  });
 }
 
 /** get data from cid */

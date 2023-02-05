@@ -1,5 +1,4 @@
 const process = require('process');
-const fs = require('fs');
 
 /** upload in local (private function) */
 module.exports.uploadInLocal = async (files) => {

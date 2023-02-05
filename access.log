@@ -1,6 +1,0 @@
-::1 - - [02/Feb/2023:07:18:13 +0000] "POST /upload HTTP/1.1" 500 1562 "-" "PostmanRuntime/7.30.0"
-::1 - - [02/Feb/2023:07:18:26 +0000] "POST /upload HTTP/1.1" 500 444 "-" "PostmanRuntime/7.30.0"
-::1 - - [02/Feb/2023:07:19:37 +0000] "POST /upload HTTP/1.1" 500 444 "-" "PostmanRuntime/7.30.0"
-::1 - - [02/Feb/2023:07:19:50 +0000] "POST /upload HTTP/1.1" 500 336 "-" "PostmanRuntime/7.30.0"
-::1 - - [02/Feb/2023:07:20:33 +0000] "POST /upload HTTP/1.1" 500 336 "-" "PostmanRuntime/7.30.0"
-::1 - - [02/Feb/2023:07:20:41 +0000] "POST /upload HTTP/1.1" 500 444 "-" "PostmanRuntime/7.30.0"
