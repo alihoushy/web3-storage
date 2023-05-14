@@ -30,3 +30,14 @@ module.exports.getAllNFTCollectionTransfers = async (address, chain) => {
 
   return response.toJSON();
 }
+
+
+/** get all the NFT collections owned by an address */
+module.exports.getAllNFTCollectionsByAddress = async (address, chain) => {
+  const response = await Moralis.EvmApi.nft.getWalletNFTCollections({
+    address,
+    chain,
+  });
+
+  return response.toJSON();
+}

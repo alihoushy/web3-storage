@@ -54,4 +54,21 @@ router.get('/collection/nfts/transfers', async function(req, res) {
   }
 });
 
+/** get all the NFT collections owned by an address */
+router.get('/address/collections', async function(req, res) {
+  try {
+    /** access the provided query parameters */
+    const address = req.query.address;
+    const chain = req.query.chain;
+
+    /** get transfers history */
+    const data = await moralis.getAllNFTCollectionsByAddress(address, chain);
+
+    /** response */
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(err.status || 500).json({ message: err.message, stack: err.stack });
+  }
+});
+
 module.exports = router;
